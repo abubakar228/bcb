@@ -1,0 +1,65 @@
+name: Import attached ZIP assets
+on:
+  push:
+    paths:
+      - '.bcbzip-assets-trigger'
+permissions:
+  contents: write
+
+jobs:
+  import:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download exact attached-design assets
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p assets
+          NET='https://6ab2ee71c48beb4950a5f136--glittery-mermaid-636cfe.netlify.app/assets'
+          WP='https://beercitybilliards.com/wp-content/uploads'
+
+          curl -L --fail --retry 3 "$NET/logo.png" -o assets/bcbzip-logo.png
+          curl -L --fail --retry 3 "$NET/hero-bg-v3.jpg" -o assets/bcbzip-hero-bg-v3.jpg
+          curl -L --fail --retry 3 "$NET/hero.jpg" -o assets/bcbzip-hero.jpg
+          curl -L --fail --retry 3 "$NET/taom-gold-lion.jpg" -o assets/bcbzip-taom-gold-lion.jpg
+          curl -L --fail --retry 3 "$NET/taom-logo-official.svg" -o assets/bcbzip-taom-logo-official.svg
+          curl -L --fail --retry 3 "$NET/taom-logo-official-black.svg" -o assets/bcbzip-taom-logo-official-black.svg
+
+          echo 'b01551adbc532f2945f7ab655b877c9c26593559cf75b29c76a987716d7f630e  assets/bcbzip-logo.png' | sha256sum -c -
+          echo 'e23d899089f06db1cc1f1228e7e3396dcb21a344043168d8d9a2c8a60dcac837  assets/bcbzip-hero-bg-v3.jpg' | sha256sum -c -
+          echo '3513967956f3b5466bb2312e26a15701bcf811d93ec30dc1cf7a4c4c0a0687a3  assets/bcbzip-hero.jpg' | sha256sum -c -
+          echo '7fc4ec08b2d3b1fefaac245d8ff6b02e8eab5f92592c991e8d86545d39711776  assets/bcbzip-taom-gold-lion.jpg' | sha256sum -c -
+          echo 'a74e2b5898100156c4605a555856ec1da33005b39300dfc90ae3458de28cfee6  assets/bcbzip-taom-logo-official.svg' | sha256sum -c -
+          echo 'e162615216b2ef40e4d04af54d5a18d864a2df29bba629cd49d3b84e6b74c86f  assets/bcbzip-taom-logo-official-black.svg' | sha256sum -c -
+
+          curl -L --fail --retry 3 "$WP/2025/08/Add-Variants.webp" -o assets/bcbzip-coin-feature.webp
+          curl -L --fail --retry 3 "$WP/2026/04/Table-Repairing-Service-In-Michigan.webp" -o assets/bcbzip-table-service.webp
+          curl -L --fail --retry 3 "$WP/2024/12/BCB-logo-1024x798.webp" -o assets/bcbzip-cru5h-logo.webp
+          curl -L --fail --retry 3 "$WP/2026/09/Coinfinity_logo_optimized_100.png" -o assets/bcbzip-coinfinity-logo.png
+          curl -L --fail --retry 3 "$WP/2024/12/Square-Chalk-Holder-for-Pool-1.webp" -o assets/bcbzip-square-chalk.webp
+          curl -L --fail --retry 3 "$WP/2024/12/Quarter-Coin-Dispenser-Pool.webp" -o assets/bcbzip-transparent-coin.webp
+          curl -L --fail --retry 3 "$WP/2024/12/Aluminum-Coin-Holders-Quarter-Dispensers-Durable-and-Reliable.webp" -o assets/bcbzip-aluminum-coin.webp
+          curl -L --fail --retry 3 "$WP/2024/12/Metal-Pool-Chalk-Holder-Durable-and-Stylish.webp" -o assets/bcbzip-metal-chalk.webp
+          curl -L --fail --retry 3 "$WP/2024/12/Moosehead-Bridge-Cue-Rest.webp" -o assets/bcbzip-moosehead.webp
+          curl -L --fail --retry 3 "$WP/2024/12/6-Holders-Magnetic-Chalk-Holder-Belt-Clip-Pool.webp" -o assets/bcbzip-cru5h-magnetic.webp
+          curl -L --fail --retry 3 "$WP/2026/04/gift-box-gift-moose-head-coin-holder.webp" -o assets/bcbzip-gift-box.webp
+          curl -L --fail --retry 3 "$WP/2024/12/Pro-Series-Circle-TAOM-Chalk-Holder.webp" -o assets/bcbzip-circle-taom-holder.webp
+          curl -L --fail --retry 3 "$WP/2025/01/Handmade-TAOM-Billiard-Cue-Chalk-Made-in-Finland.webp" -o assets/bcbzip-taom-handmade.webp
+          curl -L --fail --retry 3 "$WP/2025/01/Taom-MaxRack.webp" -o assets/bcbzip-taom-maxrack.webp
+          curl -L --fail --retry 3 "$WP/2025/01/Taom-V10-Blue-Chalk.webp" -o assets/bcbzip-taom-v10-blue.webp
+          curl -L --fail --retry 3 "$WP/2025/02/Taom-Midas-Cue-Glove.webp" -o assets/bcbzip-taom-glove.webp
+          curl -L --fail --retry 3 "$WP/2026/09/dasasdqwdsfe_optimized_100.webp" -o assets/bcbzip-taom-promo.webp
+          curl -L --fail --retry 3 "$WP/2024/12/BCB-logo-1024x798.png" -o assets/bcbzip-about-logo.png
+
+      - name: Commit local assets and remove importer
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -f .bcbzip-assets-trigger .github/workflows/import-bcbzip-assets.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Import exact assets from attached Netlify ZIP"
+          git push
