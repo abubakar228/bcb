@@ -1,0 +1,77 @@
+{%- liquid
+  assign seo_home_title = 'Best Hydrate | Science-Informed Electrolyte Hydration'
+  assign seo_default_description = 'Best Hydrate is a Canadian science-informed electrolyte drink mix for performance, everyday hydration and recovery. Explore the formula and hydration science.'
+  assign og_title = page_title | default: shop.name
+  assign og_url = canonical_url | default: request.origin
+  assign og_type = 'website'
+  assign og_description = page_description | default: shop.description | default: seo_default_description
+  assign social_image = page_image
+  assign seo_noindex = false
+
+  if request.page_type == 'index'
+    assign og_title = seo_home_title
+    assign og_description = seo_default_description
+  endif
+
+  if social_image == blank and settings.logo != blank
+    assign social_image = settings.logo
+  elsif social_image == blank and settings.favicon != blank
+    assign social_image = settings.favicon
+  endif
+
+  if request.page_type == 'product'
+    assign og_type = 'product'
+  elsif request.page_type == 'article'
+    assign og_type = 'article'
+  elsif request.page_type == 'password'
+    assign og_url = request.origin
+  endif
+
+  if request.page_type == 'search' or request.page_type == 'cart' or request.page_type == '404'
+    assign seo_noindex = true
+  elsif request.page_type contains 'customers/'
+    assign seo_noindex = true
+  elsif request.page_type == 'collection' and collection.handle == 'all'
+    assign seo_noindex = true
+  endif
+-%}
+
+{%- if seo_noindex -%}
+  <meta name="robots" content="noindex,follow">
+{%- endif -%}
+
+{%- if settings.favicon != blank -%}
+  <link rel="icon" type="image/png" sizes="96x96" href="{{ settings.favicon | image_url: width: 96, height: 96, crop: 'center' }}">
+  <link rel="shortcut icon" type="image/png" href="{{ settings.favicon | image_url: width: 96, height: 96, crop: 'center' }}">
+  <link rel="apple-touch-icon" sizes="180x180" href="{{ settings.favicon | image_url: width: 180, height: 180, crop: 'center' }}">
+{%- endif -%}
+
+<meta property="og:site_name" content="{{ shop.name }}">
+<meta property="og:url" content="{{ og_url }}">
+<meta property="og:title" content="{{ og_title | escape }}">
+<meta property="og:type" content="{{ og_type }}">
+<meta property="og:description" content="{{ og_description | escape }}">
+
+{%- if social_image -%}
+  <meta property="og:image" content="https:{{ social_image | image_url: width: 1200 }}">
+  <meta property="og:image:secure_url" content="https:{{ social_image | image_url: width: 1200 }}">
+  <meta property="og:image:width" content="{{ social_image.width }}">
+  <meta property="og:image:height" content="{{ social_image.height }}">
+{%- endif -%}
+
+{%- if request.page_type == 'product' -%}
+  <meta property="product:price:amount" content="{{ product.price | money_without_currency | strip_html }}">
+  <meta property="product:price:currency" content="{{ cart.currency.iso_code }}">
+{%- endif -%}
+
+{%- if settings.social_twitter_link != blank -%}
+  <meta name="twitter:site" content="{{ settings.social_twitter_link | split: 'twitter.com/' | last | prepend: '@' }}">
+{%- endif -%}
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{{ og_title | escape }}">
+<meta name="twitter:description" content="{{ og_description | escape }}">
+{%- if social_image -%}
+  <meta name="twitter:image" content="https:{{ social_image | image_url: width: 1200 }}">
+{%- endif -%}
+
+{% render 'bhd-seo-structured-data' %}
