@@ -9,7 +9,6 @@ permissions:
 
 jobs:
   install:
-    if: github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -46,9 +45,7 @@ jobs:
           p=Path('layout/theme.liquid')
           s=p.read_text()
           marker="{{ 'base.css' | asset_url | stylesheet_tag }}"
-          inject="""{{ 'base.css' | asset_url | stylesheet_tag }}
-    {{ 'bcb-reference.css' | asset_url | stylesheet_tag }}
-    <script src="{{ 'bcb-reference.js' | asset_url }}" defer="defer"></script>"""
+          inject="{{ 'base.css' | asset_url | stylesheet_tag }}\\n    {{ 'bcb-reference.css' | asset_url | stylesheet_tag }}\\n    <script src=\\\"{{ 'bcb-reference.js' | asset_url }}\\\" defer=\\\"defer\\\"></script>"
           if "bcb-reference.css" not in s:
               s=s.replace(marker,inject,1)
           p.write_text(s)
