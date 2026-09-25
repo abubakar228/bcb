@@ -16,168 +16,30 @@
     {%- endunless -%}
 
     <title>
-      {%- if request.page_type == 'index' -%}
-        Best Hydrate | Science-Informed Electrolyte Hydration
-      {%- else -%}
-        {{ page_title }}
-        {%- if current_tags %} &ndash; tagged "{{ current_tags | join: ', ' }}"{% endif -%}
-        {%- if current_page != 1 %} &ndash; Page {{ current_page }}{% endif -%}
-        {%- unless page_title contains shop.name %} &ndash; {{ shop.name }}{% endunless -%}
-      {%- endif -%}
+      {{ page_title }}
+      {%- if current_tags %} &ndash; tagged "{{ current_tags | join: ', ' }}"{% endif -%}
+      {%- if current_page != 1 %} &ndash; Page {{ current_page }}{% endif -%}
+      {%- unless page_title contains shop.name %} &ndash; {{ shop.name }}{% endunless -%}
     </title>
 
-    {% if request.page_type == 'index' %}
-      <meta name="description" content="Best Hydrate is a Canadian science-informed electrolyte drink mix for performance, everyday hydration and recovery. Explore the formula and hydration science.">
-    {% elsif page_description %}
+    {% if page_description %}
       <meta name="description" content="{{ page_description | escape }}">
     {% endif %}
 
     {% render 'meta-tags' %}
 
-    <script type="module">
-      import * as StandardEvents from 'https://cdn.shopify.com/storefront/standard-events.js';
-
-      window.StandardEvents = StandardEvents;
-
-      customElements.define('collection-component', StandardEvents.createViewEventElement());
-      customElements.define(
-        'product-component',
-        StandardEvents.createViewEventElement(HTMLElement, { defaultTrigger: 'intersect' }),
-      );
-
-      document.addEventListener('DOMContentLoaded', () => {
-        const template = document.querySelector('main[data-template]')?.dataset.template || '';
-        document.dispatchEvent(
-          new StandardEvents.PageViewEvent({
-            page: { template, title: document.title, url: window.location.href },
-          })
-        );
-      }, { once: true });
-    </script>
-
     <script src="{{ 'constants.js' | asset_url }}" defer="defer"></script>
     <script src="{{ 'pubsub.js' | asset_url }}" defer="defer"></script>
     <script src="{{ 'global.js' | asset_url }}" defer="defer"></script>
-    <script src="{{ 'cart-disclosure-modal.js' | asset_url }}" defer="defer"></script>
-    <script src="{{ 'cart-disclosure-tooltip.js' | asset_url }}" defer="defer"></script>
     <script src="{{ 'details-disclosure.js' | asset_url }}" defer="defer"></script>
     <script src="{{ 'details-modal.js' | asset_url }}" defer="defer"></script>
     <script src="{{ 'search-form.js' | asset_url }}" defer="defer"></script>
-    <script src="{{ 'standard-actions-override.js' | asset_url }}" defer="defer"></script>
 
     {%- if settings.animations_reveal_on_scroll -%}
       <script src="{{ 'animations.js' | asset_url }}" defer="defer"></script>
     {%- endif -%}
 
     {{ content_for_header }}
-
-    {%- comment -%}
-      BHD Klaviyo onsite fallback
-      The Klaviyo Shopify app embed remains enabled. This fallback only activates
-      when the embed fails to render Klaviyo.js, preventing duplicate loaders/events.
-    {%- endcomment -%}
-    <script>
-      (function () {
-        if (window.__bhdKlaviyoFallbackChecked) return;
-        window.__bhdKlaviyoFallbackChecked = true;
-
-        function hasKlaviyoLoader() {
-          return Array.prototype.some.call(document.scripts, function (script) {
-            return script.src && /static\.klaviyo\.com\/onsite\/js\//.test(script.src);
-          });
-        }
-
-        function initKlaviyoQueue() {
-          if (window.klaviyo) return;
-          window._klOnsite = window._klOnsite || [];
-          try {
-            window.klaviyo = new Proxy({}, {
-              get: function (_, property) {
-                if (property === 'push') {
-                  return function () {
-                    window._klOnsite.push.apply(window._klOnsite, arguments);
-                  };
-                }
-                return function () {
-                  var args = Array.prototype.slice.call(arguments);
-                  var callback = typeof args[args.length - 1] === 'function' ? args.pop() : undefined;
-                  return new Promise(function (resolve) {
-                    window._klOnsite.push([property].concat(args, [function (result) {
-                      if (callback) callback(result);
-                      resolve(result);
-                    }]));
-                  });
-                };
-              }
-            });
-          } catch (error) {
-            window.klaviyo = window.klaviyo || [];
-            window.klaviyo.push = function () {
-              window._klOnsite.push.apply(window._klOnsite, arguments);
-            };
-          }
-        }
-
-        function activateFallback() {
-          if (hasKlaviyoLoader()) return;
-
-          initKlaviyoQueue();
-
-          var script = document.createElement('script');
-          script.type = 'text/javascript';
-          script.async = true;
-          script.src = 'https://static.klaviyo.com/onsite/js/klaviyo.js?company_id=UmwHWm';
-          script.setAttribute('data-bhd-klaviyo-fallback', 'true');
-          document.head.appendChild(script);
-
-          {% if request.page_type == 'product' and product %}
-            if (!window.__bhdKlaviyoViewedProductTracked) {
-              window.__bhdKlaviyoViewedProductTracked = true;
-
-              var viewedProduct = {
-                Name: {{ product.title | json }},
-                ProductID: {{ product.id | json }},
-                Categories: {{ product.collections | map: 'title' | json }},
-                ImageURL: {{ product.featured_image | image_url: width: 1200 | prepend: 'https:' | json }},
-                URL: {{ shop.url | append: product.url | json }},
-                Brand: {{ product.vendor | json }},
-                Price: {{ product.selected_or_first_available_variant.price | divided_by: 100.0 | json }},
-                CompareAtPrice: {{ product.compare_at_price_max | divided_by: 100.0 | json }}
-              };
-
-              function trackViewedProduct() {
-                window.klaviyo.track('Viewed Product', viewedProduct);
-                window.klaviyo.trackViewedItem({
-                  Title: viewedProduct.Name,
-                  ItemId: viewedProduct.ProductID,
-                  Categories: viewedProduct.Categories,
-                  ImageUrl: viewedProduct.ImageURL,
-                  Url: viewedProduct.URL,
-                  Metadata: {
-                    Brand: viewedProduct.Brand,
-                    Price: viewedProduct.Price,
-                    CompareAtPrice: viewedProduct.CompareAtPrice
-                  }
-                });
-              }
-
-              var identifiedEmail = new URLSearchParams(window.location.search).get('utm_email');
-              if (identifiedEmail) {
-                window.klaviyo.identify({ email: identifiedEmail }).then(trackViewedProduct);
-              } else {
-                trackViewedProduct();
-              }
-            }
-          {% endif %}
-        }
-
-        if (document.readyState === 'loading') {
-          document.addEventListener('DOMContentLoaded', activateFallback, { once: true });
-        } else {
-          activateFallback();
-        }
-      })();
-    </script>
 
     {%- liquid
       assign body_font_bold = settings.type_body_font | font_modify: 'weight', 'bold'
@@ -373,8 +235,9 @@
       }
 
       body {
-        display: flex;
-        flex-direction: column;
+        display: grid;
+        grid-template-rows: auto auto 1fr auto;
+        grid-template-columns: 100%;
         min-height: 100%;
         margin: 0;
         font-size: 1.5rem;
@@ -392,7 +255,9 @@
       }
     {% endstyle %}
 
-    {{ 'base.css' | asset_url | stylesheet_tag }}\n    {{ 'bcb-reference.css' | asset_url | stylesheet_tag }}\n    <script src=\"{{ 'bcb-reference.js' | asset_url }}\" defer=\"defer\"></script>
+    {{ 'base.css' | asset_url | stylesheet_tag }}
+    {{ 'bcb-reference.css' | asset_url | stylesheet_tag }}
+    <script src="{{ 'bcb-reference.js' | asset_url }}" defer="defer"></script>
     <link rel="stylesheet" href="{{ 'component-cart-items.css' | asset_url }}" media="print" onload="this.media='all'">
 
     {%- if settings.cart_type == 'drawer' -%}
@@ -444,17 +309,9 @@
       {%- render 'cart-drawer' -%}
     {%- endif -%}
 
-    {% render 'bhd-announcement-system' %}
-
     {% sections 'header-group' %}
 
-    <main
-      id="MainContent"
-      class="content-for-layout focus-none"
-      role="main"
-      tabindex="-1"
-      data-template="{{ template.name }}"
-    >
+    <main id="MainContent" class="content-for-layout focus-none" role="main" tabindex="-1">
       {{ content_for_layout }}
     </main>
 

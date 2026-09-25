@@ -6,7 +6,7 @@
   - article: {Object} Article object
   - media_aspect_ratio: {String} The setting changes the aspect ratio of the article image, if shown
   - media_height: {String} The setting changes the height of the article image. Overrides media_aspect_ratio.
-  - show_image: {String} The setting either show the image or not. If it's not included it will show the image by default
+  - show_image: {String} The setting either show the article image or not. If it's not included it will show the image by default
   - show_date: {String} The setting either show the article date or not. If it's not included it will not show the image by default
   - show_author: {String} The setting either show the article author or not. If it's not included it will not show the author by default
   - show_badge: {String} The setting either show the blog badge or not.
@@ -15,7 +15,6 @@
   Usage:
   {% render 'article-card' blog: blog, article: article, show_image: section.settings.show_image %}
 {% endcomment %}
-{% comment %}BHD performance sync marker 2026-09-09{% endcomment %}
 
 {%- if article and article != empty -%}
   {%- liquid
@@ -64,10 +63,8 @@
                 sizes="(min-width: {{ settings.page_width }}px) {{ settings.page_width | minus: 100 | divided_by: 2 }}px, (min-width: 750px) calc((100vw - 130px) / 2), calc((100vw - 50px) / 2)"
                 alt="{{ article.image.src.alt | escape }}"
                 class="motion-reduce"
-                decoding="async"
                 {% unless lazy_load == false %}
                   loading="lazy"
-                  fetchpriority="low"
                 {% endunless %}
                 width="{{ article.image.width }}"
                 height="{{ article.image.height }}"
