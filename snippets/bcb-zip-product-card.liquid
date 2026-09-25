@@ -1,0 +1,27 @@
+{% liquid
+  assign p = all_products[handle]
+  assign product_url = routes.all_products_collection_url
+  if p != blank
+    assign product_url = p.url
+  endif
+%}
+<div class="prod-card"{% if dark %} style="border-color:#2a2a2a;background:#111"{% endif %}>
+  <div class="prod-img">
+    {% if badge != blank %}<span class="prod-badge" style="{{ badge_style }}">{{ badge }}</span>{% endif %}
+    <a href="{{ product_url }}"><img src="{{ image_asset | asset_url }}" alt="{{ title | escape }}"></a>
+  </div>
+  <div class="prod-info">
+    <h3{% if dark %} style="color:white"{% endif %}>{{ title }}</h3>
+    <div class="prod-price"{% if dark %} style="color:white"{% endif %}>{{ price }}</div>
+    <div class="prod-action">
+      {% if p != blank and p.available and p.variants.size == 1 and choose_options != true %}
+        {% form 'product', p %}
+          <input type="hidden" name="id" value="{{ p.selected_or_first_available_variant.id }}">
+          <button class="btn {% if dark %}btn-primary{% else %}btn-dark{% endif %}" type="submit"{% if dark %} style="width:100%"{% endif %}>Add to Cart</button>
+        {% endform %}
+      {% else %}
+        <a class="btn {% if dark %}btn-outline-dark{% else %}btn-outline{% endif %}" href="{{ product_url }}"{% if dark %} style="width:100%"{% endif %}>{% if choose_options %}Choose Options{% else %}Add to Cart{% endif %}</a>
+      {% endif %}
+    </div>
+  </div>
+</div>
