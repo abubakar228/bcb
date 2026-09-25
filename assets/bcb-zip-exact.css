@@ -137,3 +137,7 @@ img{max-width:100%;display:block}
   .logo{height:38px}
   .section{padding:48px 0}
 }
+
+/* Shopify header-group adapter: preserves the ZIP behavior where the announcement scrolls away and the white header stays at the top. */
+.shopify-section-group-header-group{position:sticky;top:-40px;z-index:50}
+.shopify-section-group-header-group .header{position:relative;top:auto}
