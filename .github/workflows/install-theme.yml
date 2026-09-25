@@ -19,6 +19,7 @@ jobs:
           set -euo pipefail
           find assets sections snippets templates -type f \( -iname '*bhd*' -o -iname '*austin*' -o -iname '*rewind*' \) -delete
           rm -f templates/page.about.json
+          rm -f assets/hero-mobile-*.webp assets/hero-v2-mobile-*.webp
 
       - name: Restore contaminated standard Refresh files
         shell: bash
