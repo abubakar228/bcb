@@ -1,0 +1,24 @@
+<section class="bcb-section bcb-about">
+  <div class="bcb-container bcb-about__grid">
+    <div class="bcb-about__logo"><img src="https://beercitybilliards.com/wp-content/uploads/2024/12/BCB-logo-1024x798.png" loading="lazy" alt="Beer City Billiards Logo"></div>
+    <div class="bcb-about__copy">
+      <div class="bcb-eyebrow">About Beer City Billiards</div>
+      <h2 class="bcb-heading">{{ section.settings.heading }}</h2>
+      <p>{{ section.settings.p1 }}</p><p>{{ section.settings.p2 }}</p><p>{{ section.settings.p3 }}</p>
+      <div class="bcb-actions"><a class="bcb-btn bcb-btn--dark" href="{{ section.settings.about_link | default: '/pages/about-us' }}">Read Our Story</a><a class="bcb-btn bcb-btn--outline-dark" href="{{ routes.all_products_collection_url }}">Shop All Accessories</a></div>
+    </div>
+  </div>
+</section>
+{% schema %}
+{
+  "name":"BCB About",
+  "settings":[
+    {"type":"text","id":"heading","label":"Heading","default":"Passion For The Game Meets Precision Craftsmanship"},
+    {"type":"textarea","id":"p1","label":"Paragraph 1","default":"Welcome to Beer City Billiards, where passion for the game meets precision craftsmanship. Based on a commitment to quality and innovation, we specialize in providing premium snooker and billiards accessories to elevate your playing experience."},
+    {"type":"textarea","id":"p2","label":"Paragraph 2","default":"From finely crafted snooker chalk and magnetic chalk belt clips to versatile cue tip shapers and durable coin holders, every product we offer is designed with players in mind. Whether you're a seasoned professional or a passionate hobbyist, our range ensures you have the tools you need to play at your best."},
+    {"type":"textarea","id":"p3","label":"Paragraph 3","default":"Our mission is simple: deliver affordable, reliable, and premium pool products to players of all levels."},
+    {"type":"url","id":"about_link","label":"About page link"}
+  ],
+  "presets":[{"name":"BCB About"}]
+}
+{% endschema %}

@@ -1,0 +1,67 @@
+<section class="bcb-hero" style="--bcb-hero-bg:url('{{ 'bcb-hero-bg-v3.png' | asset_url }}');">
+  <div class="bcb-hero__shade" aria-hidden="true"></div>
+  <div class="bcb-container bcb-hero__inner">
+    <div class="bcb-hero__content">
+      <div class="bcb-eyebrow">{{ section.settings.eyebrow }}</div>
+      <h1 class="bcb-title">{{ section.settings.heading }}</h1>
+      <p class="bcb-hero__lead">{{ section.settings.text }}</p>
+
+      <div class="bcb-actions">
+        <a class="bcb-btn bcb-btn--primary" href="{{ section.settings.primary_link | default: routes.all_products_collection_url }}">{{ section.settings.primary_label }}</a>
+        <a class="bcb-btn bcb-btn--secondary" href="{{ section.settings.secondary_link | default: '/pages/table-service' }}">{{ section.settings.secondary_label }}</a>
+      </div>
+
+      <div class="bcb-hero__stats" aria-label="Store highlights">
+        <div class="bcb-stat"><strong>{{ section.settings.stat_1_value }}</strong><span>{{ section.settings.stat_1_label }}</span></div>
+        <div class="bcb-stat"><strong>{{ section.settings.stat_2_value }}</strong><span>{{ section.settings.stat_2_label }}</span></div>
+        <div class="bcb-stat"><strong>{{ section.settings.stat_3_value }}</strong><span>{{ section.settings.stat_3_label }}</span></div>
+      </div>
+
+      <div class="bcb-hero__micro-trust">
+        <span>Free Shipping Over $50</span>
+        <span>Same-Day Dispatch</span>
+        <span>Michigan Trusted</span>
+      </div>
+
+      <div class="bcb-promo-cards">
+        <a class="bcb-promo-card" href="{{ section.settings.promo_1_link | default: routes.all_products_collection_url }}">
+          <span class="bcb-promo-card__kicker">Bestseller</span>
+          <strong>{{ section.settings.promo_1_title }}</strong>
+          <span>{{ section.settings.promo_1_text }}</span>
+        </a>
+        <a class="bcb-promo-card" href="{{ section.settings.promo_2_link | default: '/pages/table-service' }}">
+          <span class="bcb-promo-card__kicker">Michigan Service</span>
+          <strong>{{ section.settings.promo_2_title }}</strong>
+          <span>{{ section.settings.promo_2_text }}</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+{% schema %}
+{
+  "name":"BCB Hero",
+  "settings":[
+    {"type":"text","id":"eyebrow","label":"Eyebrow","default":"Grand Rapids, Michigan • Premium Since 2020"},
+    {"type":"textarea","id":"heading","label":"Heading","default":"Premium Billiards Accessories Built For Serious Players"},
+    {"type":"textarea","id":"text","label":"Text","default":"At Beer City Billiards, we specialize in high-quality billiards accessories and professional pool table repair services across Michigan. Affordable, reliable, premium."},
+    {"type":"text","id":"primary_label","label":"Primary button","default":"Shop Best Sellers →"},
+    {"type":"url","id":"primary_link","label":"Primary link"},
+    {"type":"text","id":"secondary_label","label":"Secondary button","default":"Book Table Service"},
+    {"type":"url","id":"secondary_link","label":"Secondary link"},
+    {"type":"text","id":"stat_1_value","label":"Stat 1 value","default":"2,500+"},
+    {"type":"text","id":"stat_1_label","label":"Stat 1 label","default":"Happy Players"},
+    {"type":"text","id":"stat_2_value","label":"Stat 2 value","default":"4.9★"},
+    {"type":"text","id":"stat_2_label","label":"Stat 2 label","default":"Customer Rating"},
+    {"type":"text","id":"stat_3_value","label":"Stat 3 value","default":"100%"},
+    {"type":"text","id":"stat_3_label","label":"Stat 3 label","default":"Satisfaction"},
+    {"type":"text","id":"promo_1_title","label":"Promo 1 title","default":"Coin Holders"},
+    {"type":"text","id":"promo_1_text","label":"Promo 1 text","default":"Holds $10 • Jingle-Free • From $16.79"},
+    {"type":"url","id":"promo_1_link","label":"Promo 1 link"},
+    {"type":"text","id":"promo_2_title","label":"Promo 2 title","default":"Pool Table Repair MI"},
+    {"type":"text","id":"promo_2_text","label":"Promo 2 text","default":"Re-Felting • Leveling • Full Restoration"},
+    {"type":"url","id":"promo_2_link","label":"Promo 2 link"}
+  ],
+  "presets":[{"name":"BCB Hero"}]
+}
+{% endschema %}

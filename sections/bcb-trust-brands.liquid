@@ -1,0 +1,49 @@
+<section class="bcb-trust">
+  <div class="bcb-container bcb-trust__grid">
+    <div class="bcb-trust__item"><span class="bcb-trust__icon">✦</span>Free Shipping Over $50</div>
+    <div class="bcb-trust__item"><span class="bcb-trust__icon">◆</span>Premium Aluminum &amp; Steel Build</div>
+    <div class="bcb-trust__item"><span class="bcb-trust__icon">●</span>Michigan Repair • Professional Service</div>
+    <div class="bcb-trust__item"><span class="bcb-trust__icon">✓</span>Secure Checkout • Satisfaction Guaranteed</div>
+  </div>
+</section>
+<section class="bcb-section bcb-brands">
+  <div class="bcb-container">
+    <div class="bcb-section-head">
+      <div><h2 class="bcb-heading">{{ section.settings.heading }}</h2><p class="bcb-subtitle">{{ section.settings.text }}</p></div>
+    </div>
+    <div class="bcb-brand-grid">
+      {% for block in section.blocks %}
+        <a class="bcb-brand-card" href="{{ block.settings.link | default: routes.all_products_collection_url }}" {{ block.shopify_attributes }}>
+          {% if block.settings.image != blank %}
+            {{ block.settings.image | image_url: width: 420 | image_tag: loading: 'lazy', alt: block.settings.title }}
+          {% elsif block.settings.image_url != blank %}
+            {% if block.settings.image_url contains '://' %}
+              <img src="{{ block.settings.image_url }}" loading="lazy" alt="{{ block.settings.title | escape }}">
+            {% else %}
+              <img src="{{ block.settings.image_url | asset_url }}" loading="lazy" alt="{{ block.settings.title | escape }}">
+            {% endif %}
+          {% endif %}
+          <h3>{{ block.settings.title }}</h3><p>{{ block.settings.text }}</p><b>Shop Now</b>
+        </a>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% schema %}
+{
+  "name":"BCB Trust + Brands",
+  "max_blocks":4,
+  "settings":[
+    {"type":"text","id":"heading","label":"Heading","default":"Shop By Brand"},
+    {"type":"textarea","id":"text","label":"Text","default":"Curated brands trusted by league and tournament players across USA. Built for durability and performance."}
+  ],
+  "blocks":[{"type":"brand","name":"Brand","settings":[
+    {"type":"image_picker","id":"image","label":"Brand image"},
+    {"type":"text","id":"image_url","label":"Fallback external image URL"},
+    {"type":"text","id":"title","label":"Title","default":"Beer City Billiards"},
+    {"type":"text","id":"text","label":"Description","default":"Coin holders, chalk holders, cue rests"},
+    {"type":"url","id":"link","label":"Link"}
+  ]}],
+  "presets":[{"name":"BCB Trust + Brands","blocks":[{"type":"brand"},{"type":"brand"},{"type":"brand"},{"type":"brand"}]}]
+}
+{% endschema %}

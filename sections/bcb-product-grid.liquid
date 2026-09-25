@@ -1,0 +1,63 @@
+{% liquid
+  assign selected_collection = section.settings.collection
+  if selected_collection == blank
+    assign selected_collection = collections.all
+  endif
+  assign preferred_handles = 'pro-series-square-pool-chalk-holder-compact-and-durable,coin-holder-with-transparent-slot-convenient-pool-accessory,aluminum-coin-holders-quarter-dispensers-durable-and-reliable,metal-pool-chalk-holder-durable-and-stylish,moosehead-bridge-cue-rest-premium-billiard-accessory,magnetic-chalk-holder-belt-clip-pool-cue-accessory-cru5h,gift-box-octagon-chalk-holder-moosehead-rest-coin-holder,pro-series-circle-pool-chalk-holder-for-taom-v10-pyro' | split: ','
+%}
+<section class="bcb-section bcb-products{% if section.settings.white_bg %} bcb-products--white{% endif %}">
+  <div class="bcb-container">
+    <div class="bcb-section-head">
+      <div>
+        <h2 class="bcb-heading">{{ section.settings.heading }}</h2>
+        {% if section.settings.text != blank %}<p class="bcb-subtitle">{{ section.settings.text }}</p>{% endif %}
+      </div>
+      <a class="bcb-btn bcb-btn--outline-dark" href="{{ selected_collection.url | default: routes.all_products_collection_url }}">{{ section.settings.button }}</a>
+    </div>
+    <div class="bcb-product-grid">
+      {% for handle in preferred_handles limit: section.settings.products_to_show %}
+        {% liquid
+          assign reference_product = all_products[handle]
+          if reference_product == blank
+            assign reference_product = selected_collection.products[forloop.index0]
+          endif
+        %}
+        {% if reference_product != blank %}
+          {% render 'bcb-product-card', product: reference_product %}
+        {% else %}
+          {% case forloop.index %}
+            {% when 1 %}{% assign fallback_title='Pro Series Square Pool Chalk Holder Compact and Durable' %}{% assign fallback_price='$13.50' %}{% assign fallback_image='https://beercitybilliards.com/wp-content/uploads/2024/12/Square-Chalk-Holder-for-Pool-1.webp' %}{% assign fallback_badge='New' %}
+            {% when 2 %}{% assign fallback_title='Coin Holder with Transparent Slot Convenient Pool Accessory' %}{% assign fallback_price='$17.29' %}{% assign fallback_image='https://beercitybilliards.com/wp-content/uploads/2024/12/Quarter-Coin-Dispenser-Pool.webp' %}{% assign fallback_badge='Bestseller' %}
+            {% when 3 %}{% assign fallback_title='Aluminum Coin Holders Quarter Dispensers Durable and Reliable' %}{% assign fallback_price='$16.79 – $17.79' %}{% assign fallback_image='https://beercitybilliards.com/wp-content/uploads/2024/12/Aluminum-Coin-Holders-Quarter-Dispensers-Durable-and-Reliable.webp' %}{% assign fallback_badge='' %}
+            {% when 4 %}{% assign fallback_title='Metal Pool Chalk Holder Durable and Stylish' %}{% assign fallback_price='$14.95' %}{% assign fallback_image='https://beercitybilliards.com/wp-content/uploads/2024/12/Metal-Pool-Chalk-Holder-Durable-and-Stylish.webp' %}{% assign fallback_badge='' %}
+            {% when 5 %}{% assign fallback_title='Moosehead Bridge Cue Rest Premium Billiard Accessory' %}{% assign fallback_price='$6.49 – $19.99' %}{% assign fallback_image='https://beercitybilliards.com/wp-content/uploads/2024/12/Moosehead-Bridge-Cue-Rest.webp' %}{% assign fallback_badge='Moosehead' %}
+            {% when 6 %}{% assign fallback_title='Magnetic Chalk Holder Belt Clip Pool Cue Accessory - CRU5H' %}{% assign fallback_price='$17.95 – $39.99' %}{% assign fallback_image='https://beercitybilliards.com/wp-content/uploads/2024/12/6-Holders-Magnetic-Chalk-Holder-Belt-Clip-Pool.webp' %}{% assign fallback_badge='' %}
+            {% when 7 %}{% assign fallback_title='Gift Box – Octagon Chalk Holder, Moosehead Rest, Coin Holder' %}{% assign fallback_price='$57.27' %}{% assign fallback_image='https://beercitybilliards.com/wp-content/uploads/2026/04/gift-box-gift-moose-head-coin-holder.webp' %}{% assign fallback_badge='Gift Box' %}
+            {% when 8 %}{% assign fallback_title='Pro Series Circle Pool Chalk Holder for TAOM V10 & Pyro' %}{% assign fallback_price='$14.98 – $33.98' %}{% assign fallback_image='https://beercitybilliards.com/wp-content/uploads/2024/12/Pro-Series-Circle-TAOM-Chalk-Holder.webp' %}{% assign fallback_badge='' %}
+          {% endcase %}
+          <article class="bcb-product-card">
+            <a class="bcb-product-card__media" href="{{ routes.all_products_collection_url }}">
+              {% if fallback_badge != blank %}<span class="bcb-product-badge">{{ fallback_badge }}</span>{% endif %}
+              <img src="{{ fallback_image }}" loading="lazy" alt="{{ fallback_title | escape }}">
+            </a>
+            <div class="bcb-product-card__body"><h3 class="bcb-product-card__title"><a href="{{ routes.all_products_collection_url }}">{{ fallback_title }}</a></h3><div class="bcb-product-card__price">{{ fallback_price }}</div><a class="bcb-product-card__cta" href="{{ routes.all_products_collection_url }}">Choose Options</a></div>
+          </article>
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% schema %}
+{
+  "name":"BCB Product Grid",
+  "settings":[
+    {"type":"text","id":"heading","label":"Heading","default":"Featured Beer City Billiards Accessories"},
+    {"type":"textarea","id":"text","label":"Text"},
+    {"type":"collection","id":"collection","label":"Fallback collection"},
+    {"type":"range","id":"products_to_show","min":4,"max":8,"step":1,"default":8,"label":"Products to show"},
+    {"type":"text","id":"button","label":"Button","default":"View All Products"},
+    {"type":"checkbox","id":"white_bg","label":"White background","default":false}
+  ],
+  "presets":[{"name":"BCB Product Grid"}]
+}
+{% endschema %}

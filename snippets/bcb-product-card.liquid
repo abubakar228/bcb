@@ -1,0 +1,38 @@
+{% liquid
+  assign badge_text = ''
+  assign normalized_title = product.title | downcase
+  if normalized_title contains 'pro series square'
+    assign badge_text = 'New'
+  elsif normalized_title contains 'transparent slot'
+    assign badge_text = 'Bestseller'
+  elsif normalized_title contains 'moosehead bridge'
+    assign badge_text = 'Moosehead'
+  elsif normalized_title contains 'gift box'
+    assign badge_text = 'Gift Box'
+  endif
+%}
+<article class="bcb-product-card">
+  <a class="bcb-product-card__media" href="{{ product.url }}">
+    {% if badge_text != blank %}<span class="bcb-product-badge">{{ badge_text }}</span>{% endif %}
+    {% if product.featured_image %}
+      {{ product.featured_image | image_url: width: 900 | image_tag: loading: 'lazy', widths: '320,480,640,900', alt: product.title }}
+    {% endif %}
+  </a>
+  <div class="bcb-product-card__body">
+    <h3 class="bcb-product-card__title"><a href="{{ product.url }}">{{ product.title }}</a></h3>
+    <div class="bcb-product-card__price">
+      {% if product.price_varies %}{{ product.price_min | money }} – {{ product.price_max | money }}{% else %}{{ product.price | money }}{% endif %}
+    </div>
+    {% if product.available and product.has_only_default_variant %}
+      {% form 'product', product, class: 'bcb-product-form' %}
+        <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+        <input type="hidden" name="quantity" value="1">
+        <button class="bcb-product-card__cta" type="submit">Add to Cart</button>
+      {% endform %}
+    {% elsif product.available %}
+      <a class="bcb-product-card__cta" href="{{ product.url }}">Choose Options</a>
+    {% else %}
+      <span class="bcb-product-card__cta is-disabled">Sold Out</span>
+    {% endif %}
+  </div>
+</article>

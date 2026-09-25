@@ -1,0 +1,47 @@
+{% assign preferred_handles = 'handmade-taom-billiard-cue-chalk-made-in-finland,taom-maxracks-premium-billiards-accessories,taom-v10-blue-chalk-ultimate-performance,taom-midas-billiard-pool-cue-glove-premium-quality' | split: ',' %}
+<section class="bcb-section bcb-taom">
+  <div class="bcb-container">
+    <div class="bcb-taom__top">
+      <div class="bcb-taom__logo"><img src="{{ 'bcb-taom-gold-lion.png' | asset_url }}" loading="lazy" alt="TAOM Official Gold Lion Logo"></div>
+      <div><div class="bcb-eyebrow bcb-eyebrow--gold">Finland • Official</div><h2 class="bcb-heading">{{ section.settings.heading }}</h2><p class="bcb-subtitle">{{ section.settings.text }}</p></div>
+    </div>
+    <div class="bcb-product-grid bcb-taom-products">
+      {% assign taom_collection = section.settings.collection %}
+      {% if taom_collection == blank %}{% assign taom_collection = collections['taom'] %}{% endif %}
+      {% for handle in preferred_handles %}
+        {% liquid
+          assign taom_product = all_products[handle]
+          if taom_product == blank and taom_collection != blank
+            assign taom_product = taom_collection.products[forloop.index0]
+          endif
+        %}
+        {% if taom_product != blank %}
+          {% render 'bcb-product-card', product: taom_product %}
+        {% else %}
+          {% case forloop.index %}
+            {% when 1 %}{% assign fallback_title='Handmade TAOM Billiard Cue Chalk Made in Finland' %}{% assign fallback_price='$19.99' %}{% assign fallback_image='https://beercitybilliards.com/wp-content/uploads/2025/01/Handmade-TAOM-Billiard-Cue-Chalk-Made-in-Finland.webp' %}{% assign fallback_cta='Add to Cart' %}
+            {% when 2 %}{% assign fallback_title='Taom MaxRacks Premium Billiards Accessories' %}{% assign fallback_price='$21.79' %}{% assign fallback_image='https://beercitybilliards.com/wp-content/uploads/2025/01/Taom-MaxRack.webp' %}{% assign fallback_cta='Choose Options' %}
+            {% when 3 %}{% assign fallback_title='Taom V10 Blue Chalk - Ultimate Performance' %}{% assign fallback_price='$19.99' %}{% assign fallback_image='https://beercitybilliards.com/wp-content/uploads/2025/01/Taom-V10-Blue-Chalk.webp' %}{% assign fallback_cta='Add to Cart' %}
+            {% when 4 %}{% assign fallback_title='TAOM Midas Billiard Pool Cue Glove Premium Quality' %}{% assign fallback_price='$26.65' %}{% assign fallback_image='https://beercitybilliards.com/wp-content/uploads/2025/02/Taom-Midas-Cue-Glove.webp' %}{% assign fallback_cta='Choose Options' %}
+          {% endcase %}
+          <article class="bcb-product-card"><a class="bcb-product-card__media" href="{{ routes.all_products_collection_url }}"><img src="{{ fallback_image }}" loading="lazy" alt="{{ fallback_title | escape }}"></a><div class="bcb-product-card__body"><h3 class="bcb-product-card__title"><a href="{{ routes.all_products_collection_url }}">{{ fallback_title }}</a></h3><div class="bcb-product-card__price">{{ fallback_price }}</div><a class="bcb-product-card__cta" href="{{ routes.all_products_collection_url }}">{{ fallback_cta }}</a></div></article>
+        {% endif %}
+      {% endfor %}
+    </div>
+    <div class="bcb-taom__banner">
+      <div class="bcb-taom__banner-media"><img src="https://beercitybilliards.com/wp-content/uploads/2026/09/dasasdqwdsfe_optimized_100.webp" loading="lazy" alt="TAOM V10 Blue Chalk"></div>
+      <div class="bcb-taom__banner-copy"><strong>TAOM V10 - Next Level Precision</strong><p>Designed with world's top pros. Exceptional grip, cleaner hands, stronger consistency.</p><a class="bcb-btn bcb-btn--primary" href="{% if taom_collection != blank %}{{ taom_collection.url }}{% else %}{{ routes.all_products_collection_url }}{% endif %}">Shop TAOM V10</a></div>
+    </div>
+  </div>
+</section>
+{% schema %}
+{
+  "name":"BCB TAOM Feature",
+  "settings":[
+    {"type":"text","id":"heading","label":"Heading","default":"Shop TAOM Billiards Accessories"},
+    {"type":"textarea","id":"text","label":"Text","default":"Explore our collection of TAOM accessories, including the V10 and Pyro chalks, premium tips, and more. Tournament-grade reliability."},
+    {"type":"collection","id":"collection","label":"TAOM collection"}
+  ],
+  "presets":[{"name":"BCB TAOM Feature"}]
+}
+{% endschema %}
