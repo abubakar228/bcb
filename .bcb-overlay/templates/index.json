@@ -1,0 +1,162 @@
+{
+  "sections": {
+    "bcb_hero": {
+      "type": "bcb-hero",
+      "settings": {
+        "eyebrow": "Grand Rapids, Michigan \u2022 Premium Since 2020",
+        "heading": "Premium Billiards Accessories Built For Serious Players",
+        "text": "At Beer City Billiards, we specialize in high-quality billiards accessories and professional pool table repair services across Michigan. Affordable, reliable, premium.",
+        "primary_label": "Shop Best Sellers \u2192",
+        "primary_link": "shopify://collections/all",
+        "secondary_label": "Book Table Service",
+        "secondary_link": "",
+        "stat_1_value": "2,500+",
+        "stat_1_label": "Happy Players",
+        "stat_2_value": "4.9\u2605",
+        "stat_2_label": "Customer Rating",
+        "stat_3_value": "100%",
+        "stat_3_label": "Satisfaction",
+        "promo_1_title": "Coin Holders",
+        "promo_1_text": "Holds $10 \u2022 Jingle-Free \u2022 From $16.79",
+        "promo_1_link": "shopify://collections/all",
+        "promo_2_title": "Pool Table Repair MI",
+        "promo_2_text": "Re-Felting \u2022 Leveling \u2022 Full Restoration",
+        "promo_2_link": ""
+      }
+    },
+    "bcb_trust_brands": {
+      "type": "bcb-trust-brands",
+      "blocks": {
+        "brand_bcb": {
+          "type": "brand",
+          "settings": {
+            "image_url": "bcb-logo.png",
+            "title": "Beer City Billiards",
+            "text": "Coin holders, chalk holders, cue rests",
+            "link": "shopify://collections/all"
+          }
+        },
+        "brand_cru5h": {
+          "type": "brand",
+          "settings": {
+            "image_url": "https://beercitybilliards.com/wp-content/uploads/2024/12/BCB-logo-1024x798.webp",
+            "title": "CRU5H",
+            "text": "Magnetic chalk holders & tip tools",
+            "link": "shopify://collections/all"
+          }
+        },
+        "brand_taom": {
+          "type": "brand",
+          "settings": {
+            "image_url": "bcb-taom-gold-lion.png",
+            "title": "TAOM",
+            "text": "V10, Pyro, MaxRack & gloves \u2022 Official",
+            "link": "shopify://collections/taom"
+          }
+        },
+        "brand_coinfinity": {
+          "type": "brand",
+          "settings": {
+            "image_url": "https://beercitybilliards.com/wp-content/uploads/2026/09/Coinfinity_logo_optimized_100.png",
+            "title": "Coinfinity",
+            "text": "Innovative coin storage solutions",
+            "link": "shopify://collections/all"
+          }
+        }
+      },
+      "block_order": [
+        "brand_bcb",
+        "brand_cru5h",
+        "brand_taom",
+        "brand_coinfinity"
+      ],
+      "settings": {
+        "heading": "Shop By Brand",
+        "text": "Curated brands trusted by league and tournament players across USA. Built for durability and performance."
+      }
+    },
+    "bcb_coin": {
+      "type": "bcb-coin-feature",
+      "blocks": {
+        "p1": {
+          "type": "point",
+          "settings": {
+            "title": "Spring-Loaded Dispensing",
+            "text": "Quickly release one coin at a time with precision"
+          }
+        },
+        "p2": {
+          "type": "point",
+          "settings": {
+            "title": "Compact & Portable",
+            "text": "Fits easily in pocket, cue case, or bag without bulk"
+          }
+        },
+        "p3": {
+          "type": "point",
+          "settings": {
+            "title": "Durable Metal Build",
+            "text": "Built to last, ensuring long-term use without wear"
+          }
+        },
+        "p4": {
+          "type": "point",
+          "settings": {
+            "title": "Customizable & Stylish",
+            "text": "Available in various colors \u2014 personalize it"
+          }
+        }
+      },
+      "block_order": [
+        "p1",
+        "p2",
+        "p3",
+        "p4"
+      ],
+      "settings": {
+        "eyebrow": "Bestseller \u2022 Coin Holder",
+        "heading": "Holds $10 In Quarters Securely. Jingle-Free.",
+        "text": "Designed for pool halls, arcades, vending machines, laundromats. The original aluminum dispenser players love.",
+        "button": "View Coin Holders \u2014 From $16.79",
+        "link": "shopify://collections/all"
+      }
+    },
+    "bcb_featured_products": {
+      "type": "bcb-product-grid",
+      "settings": {
+        "heading": "Featured Beer City Billiards Accessories",
+        "text": "",
+        "collection": "all",
+        "products_to_show": 8,
+        "button": "View All Products",
+        "white_bg": false
+      }
+    },
+    "bcb_taom": {
+      "type": "bcb-taom",
+      "settings": {
+        "heading": "Shop TAOM Billiards Accessories",
+        "text": "Explore our collection of TAOM accessories, including the V10 and Pyro chalks, premium tips, and more. Tournament-grade reliability.",
+        "collection": "taom"
+      }
+    },
+    "bcb_about": {
+      "type": "bcb-about",
+      "settings": {
+        "heading": "Passion For The Game Meets Precision Craftsmanship",
+        "p1": "Welcome to Beer City Billiards, where passion for the game meets precision craftsmanship. Based on a commitment to quality and innovation, we specialize in providing premium snooker and billiards accessories to elevate your playing experience.",
+        "p2": "From finely crafted snooker chalk and magnetic chalk belt clips to versatile cue tip shapers and durable coin holders, every product we offer is designed with players in mind. Whether you're a seasoned professional or a passionate hobbyist, our range ensures you have the tools you need to play at your best.",
+        "p3": "Our mission is simple: deliver affordable, reliable, and premium pool products to players of all levels.",
+        "about_link": ""
+      }
+    }
+  },
+  "order": [
+    "bcb_hero",
+    "bcb_trust_brands",
+    "bcb_coin",
+    "bcb_featured_products",
+    "bcb_taom",
+    "bcb_about"
+  ]
+}
