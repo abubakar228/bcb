@@ -1,0 +1,41 @@
+<section class="bcb-section bcb-feature">
+  <div class="bcb-container bcb-feature__grid">
+    <div class="bcb-feature__copy">
+      <div class="bcb-eyebrow">{{ section.settings.eyebrow }}</div>
+      <h2 class="bcb-heading">{{ section.settings.heading }}</h2>
+      <p class="bcb-subtitle">{{ section.settings.text }}</p>
+      <div class="bcb-feature-list">
+        {% for block in section.blocks %}
+          <div class="bcb-feature-point" {{ block.shopify_attributes }}>
+            <i>{{ forloop.index }}</i>
+            <div><strong>{{ block.settings.title }}</strong><span>{{ block.settings.text }}</span></div>
+          </div>
+        {% endfor %}
+      </div>
+      <a class="bcb-btn bcb-btn--dark" href="{{ section.settings.link | default: routes.all_products_collection_url }}">{{ section.settings.button }}</a>
+    </div>
+    <div class="bcb-feature__media">
+      {% if section.settings.image != blank %}
+        {{ section.settings.image | image_url: width: 1200 | image_tag: loading: 'lazy', widths: '480,720,960,1200', alt: section.settings.heading }}
+      {% else %}
+        <img src="https://beercitybilliards.com/wp-content/uploads/2025/08/Add-Variants.webp" loading="lazy" alt="Beer City Billiards Coin Holders">
+      {% endif %}
+    </div>
+  </div>
+</section>
+{% schema %}
+{
+  "name":"BCB Coin Feature",
+  "max_blocks":4,
+  "settings":[
+    {"type":"image_picker","id":"image","label":"Feature image"},
+    {"type":"text","id":"eyebrow","label":"Eyebrow","default":"Bestseller • Coin Holder"},
+    {"type":"text","id":"heading","label":"Heading","default":"Holds $10 In Quarters Securely. Jingle-Free."},
+    {"type":"textarea","id":"text","label":"Text","default":"Designed for pool halls, arcades, vending machines, laundromats. The original aluminum dispenser players love."},
+    {"type":"text","id":"button","label":"Button","default":"View Coin Holders — From $16.79"},
+    {"type":"url","id":"link","label":"Link"}
+  ],
+  "blocks":[{"type":"point","name":"Feature point","settings":[{"type":"text","id":"title","label":"Title","default":"Spring-Loaded Dispensing"},{"type":"text","id":"text","label":"Text","default":"Quickly release one coin at a time with precision"}]}],
+  "presets":[{"name":"BCB Coin Feature","blocks":[{"type":"point"},{"type":"point"},{"type":"point"},{"type":"point"}]}]
+}
+{% endschema %}
