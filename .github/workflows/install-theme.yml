@@ -1,41 +1,53 @@
-name: Install Shopify theme source
+name: Clean Shopify theme source
 on:
   workflow_dispatch:
   push:
     paths:
-      - '.bcb-install-trigger'
+      - '.bcb-clean-trigger'
 permissions:
   contents: write
 
 jobs:
-  install:
+  clean:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
-      - name: Fetch Refresh 16 base
+      - name: Remove unrelated bootstrap customizations
         shell: bash
         run: |
           set -euo pipefail
-          curl -L --fail --retry 3 \
-            https://codeload.github.com/swini16/BhdMain-260907/zip/refs/heads/main \
-            -o /tmp/refresh.zip
-          unzip -q /tmp/refresh.zip -d /tmp/refresh
-          BASE="$(find /tmp/refresh -mindepth 1 -maxdepth 1 -type d | head -1)"
-          for dir in assets config layout locales sections snippets templates; do
-            rm -rf "$dir"
-            cp -a "$BASE/$dir" .
+          find assets sections snippets templates -type f \( -iname '*bhd*' -o -iname '*austin*' -o -iname '*rewind*' \) -delete
+          rm -f templates/page.about.json
+
+      - name: Restore contaminated standard Refresh files
+        shell: bash
+        run: |
+          set -euo pipefail
+          grep -RIlEi 'bhd|best hydrate|austin' assets layout sections snippets templates 2>/dev/null | while read -r file; do
+            case "$file" in
+              assets/bcb-*|sections/bcb-*|snippets/bcb-*) continue ;;
+            esac
+            url="https://raw.githubusercontent.com/Pechatos2/refresh/main/$file"
+            if curl -L --fail --silent --show-error "$url" -o /tmp/clean-file; then
+              cp /tmp/clean-file "$file"
+            fi
           done
 
-      - name: Apply Beer City Billiards overlay
+      - name: Remove non-Refresh settings blocks
         shell: bash
         run: |
-          set -euo pipefail
-          while IFS= read -r -d '' file; do
-            rel="${file#.bcb-overlay/}"
-            mkdir -p "$(dirname "$rel")"
-            cp "$file" "$rel"
-          done < <(find .bcb-overlay -type f -print0)
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('config/settings_schema.json')
+          data=json.loads(p.read_text())
+          def custom(x):
+              s=json.dumps(x, ensure_ascii=False).lower()
+              return 'bhd' in s or 'best hydrate' in s or 'austin swiniarski' in s
+          data=[x for x in data if not custom(x)]
+          p.write_text(json.dumps(data, indent=2, ensure_ascii=False)+'\n')
+          PY
 
       - name: Load Beer City design assets
         shell: bash
@@ -45,40 +57,35 @@ jobs:
           p=Path('layout/theme.liquid')
           s=p.read_text()
           marker="{{ 'base.css' | asset_url | stylesheet_tag }}"
-          inject="{{ 'base.css' | asset_url | stylesheet_tag }}\\n    {{ 'bcb-reference.css' | asset_url | stylesheet_tag }}\\n    <script src=\\\"{{ 'bcb-reference.js' | asset_url }}\\\" defer=\\\"defer\\\"></script>"
-          if "bcb-reference.css" not in s:
+          inject="{{ 'base.css' | asset_url | stylesheet_tag }}\n    {{ 'bcb-reference.css' | asset_url | stylesheet_tag }}\n    <script src=\"{{ 'bcb-reference.js' | asset_url }}\" defer=\"defer\"></script>"
+          s=s.replace("{{ 'base.css' | asset_url | stylesheet_tag }}\\n    {{ 'bcb-reference.css' | asset_url | stylesheet_tag }}\\n    <script src=\\\"{{ 'bcb-reference.js' | asset_url }}\\\" defer=\\\"defer\\\"></script>", marker)
+          if 'bcb-reference.css' not in s:
               s=s.replace(marker,inject,1)
           p.write_text(s)
           PY
 
-      - name: Store reference images locally
+      - name: Validate Shopify folders
         shell: bash
         run: |
           set -euo pipefail
-          curl -L --fail --retry 3 \
-            https://6ab2ee71c48beb4950a5f136--glittery-mermaid-636cfe.netlify.app/assets/logo.png \
-            -o assets/bcb-logo.png
-          curl -L --fail --retry 3 \
-            https://6ab2ee71c48beb4950a5f136--glittery-mermaid-636cfe.netlify.app/assets/taom-gold-lion.jpg \
-            -o assets/bcb-taom-gold-lion.png
-          curl -L --fail --retry 3 \
-            https://6ab2ee71c48beb4950a5f136--glittery-mermaid-636cfe.netlify.app/assets/hero-bg-v3.jpg \
-            -o assets/bcb-hero-bg-v3.png
+          test -f layout/theme.liquid
+          test -f config/settings_schema.json
+          test -f config/settings_data.json
+          test -f templates/index.json
+          test -f sections/header-group.json
+          test -f sections/footer-group.json
+          test -f assets/bcb-logo.png
+          test -f assets/bcb-hero-bg-v3.png
+          test -f assets/bcb-taom-gold-lion.png
+          ! grep -RIl '6ab2ee71c48beb4950a5f136--glittery-mermaid-636cfe.netlify.app' assets config layout sections snippets templates
 
-      - name: Clean installer files
+      - name: Commit cleaned Shopify theme
         shell: bash
         run: |
-          rm -rf .bcb-overlay .theme-upload .theme-source .bcb-install-trigger
-
-      - name: Commit complete Shopify theme
-        shell: bash
-        run: |
+          rm -f .bcb-clean-trigger
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A
-          if git diff --cached --quiet; then
-            echo "No changes to commit."
-            exit 0
-          fi
-          git commit -m "Install Beer City Billiards Shopify theme"
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m "Clean Beer City Billiards Shopify theme"
           git push
