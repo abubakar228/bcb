@@ -3,23 +3,61 @@ on:
   workflow_dispatch:
   push:
     paths:
-      - '.theme-source/**'
-      - '.github/workflows/install-theme.yml'
+      - '.bcb-install-trigger'
 permissions:
   contents: write
+
 jobs:
   install:
+    if: github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Rebuild theme source
+
+      - name: Fetch Refresh 16 base
         shell: bash
         run: |
           set -euo pipefail
-          cat .theme-source/chunk-* | base64 -d > /tmp/bcb-theme-source.tar.xz
-          tar -xJf /tmp/bcb-theme-source.tar.xz -C .
-          rm -rf .theme-source .theme-upload
-      - name: Commit extracted Shopify theme
+          curl -L --fail --retry 3 \
+            https://codeload.github.com/swini16/BhdMain-260907/zip/refs/heads/main \
+            -o /tmp/refresh.zip
+          unzip -q /tmp/refresh.zip -d /tmp/refresh
+          BASE="$(find /tmp/refresh -mindepth 1 -maxdepth 1 -type d | head -1)"
+          for dir in assets config layout locales sections snippets templates; do
+            rm -rf "$dir"
+            cp -a "$BASE/$dir" .
+          done
+
+      - name: Apply Beer City Billiards overlay
+        shell: bash
+        run: |
+          set -euo pipefail
+          while IFS= read -r -d '' file; do
+            rel="${file#.bcb-overlay/}"
+            mkdir -p "$(dirname "$rel")"
+            cp "$file" "$rel"
+          done < <(find .bcb-overlay -type f -print0)
+
+      - name: Store reference images locally
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -L --fail --retry 3 \
+            https://6ab2ee71c48beb4950a5f136--glittery-mermaid-636cfe.netlify.app/assets/logo.png \
+            -o assets/bcb-logo.png
+          curl -L --fail --retry 3 \
+            https://6ab2ee71c48beb4950a5f136--glittery-mermaid-636cfe.netlify.app/assets/taom-gold-lion.jpg \
+            -o assets/bcb-taom-gold-lion.png
+          curl -L --fail --retry 3 \
+            https://6ab2ee71c48beb4950a5f136--glittery-mermaid-636cfe.netlify.app/assets/hero-bg-v3.jpg \
+            -o assets/bcb-hero-bg-v3.png
+
+      - name: Clean installer files
+        shell: bash
+        run: |
+          rm -rf .bcb-overlay .theme-upload .theme-source .bcb-install-trigger
+
+      - name: Commit complete Shopify theme
         shell: bash
         run: |
           git config user.name "github-actions[bot]"
@@ -29,5 +67,5 @@ jobs:
             echo "No changes to commit."
             exit 0
           fi
-          git commit -m "Install Shopify theme source"
+          git commit -m "Install Beer City Billiards Shopify theme"
           git push
