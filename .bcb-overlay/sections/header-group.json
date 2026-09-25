@@ -1,0 +1,25 @@
+{
+  "name": "t:sections.header.name",
+  "type": "header",
+  "sections": {
+    "bcb_reference_header": {
+      "type": "bcb-reference-header",
+      "settings": {
+        "announcement": "FREE SHIPPING OVER $50 IN USA | MICHIGAN'S TRUSTED POOL TABLE REPAIR | SAME-DAY DISPATCH",
+        "logo_width": 156,
+        "shop_all_label": "Shop All",
+        "shop_all_link": "shopify://collections/all",
+        "brands_label": "Brands",
+        "service_label": "Table Service",
+        "service_link": "/pages/table-service",
+        "about_label": "About",
+        "about_link": "/pages/about-us",
+        "contact_label": "Contact",
+        "contact_link": "/pages/contact"
+      }
+    }
+  },
+  "order": [
+    "bcb_reference_header"
+  ]
+}
