@@ -1,0 +1,33 @@
+name: Install Shopify theme source
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.theme-source/**'
+      - '.github/workflows/install-theme.yml'
+permissions:
+  contents: write
+jobs:
+  install:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Rebuild theme source
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat .theme-source/chunk-* | base64 -d > /tmp/bcb-theme-source.tar.xz
+          tar -xJf /tmp/bcb-theme-source.tar.xz -C .
+          rm -rf .theme-source .theme-upload
+      - name: Commit extracted Shopify theme
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+            exit 0
+          fi
+          git commit -m "Install Shopify theme source"
+          git push
