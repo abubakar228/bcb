@@ -1,18 +1,1 @@
-{
-  "name": "t:sections.footer.name",
-  "type": "footer",
-  "sections": {
-    "bcb_reference_footer": {
-      "type": "bcb-reference-footer",
-      "settings": {
-        "description": "Premium billiards accessories and professional pool table repair services across Michigan. Affordable, reliable, premium pool products for all levels.",
-        "service_link": "/pages/table-service",
-        "about_link": "/pages/about-us",
-        "contact_link": "/pages/contact"
-      }
-    }
-  },
-  "order": [
-    "bcb_reference_footer"
-  ]
-}
+{"name":"t:sections.footer.name","type":"footer","sections":{"bcb_exact_footer":{"type":"bcb-exact-footer","settings":{}}},"order":["bcb_exact_footer"]}

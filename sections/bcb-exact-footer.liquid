@@ -1,0 +1,26 @@
+{% liquid
+  assign all_url = routes.all_products_collection_url
+  assign service_url = pages['table-service'].url | default: '/pages/table-service'
+  assign about_url = pages['about'].url | default: '/pages/about'
+  assign contact_url = pages['contact'].url | default: '/pages/contact'
+%}
+<footer class="footer"><div class="container">
+  <div class="footer-grid">
+    <div><img class="footer-logo" src="{{ 'bcb-src-logo-768x599.png' | asset_url }}" alt="Beer City Billiards" loading="lazy"><p>Premium billiards accessories and professional pool table repair services across Michigan. Affordable, reliable, premium pool products for all levels.</p><p class="footer-note">Based in Grand Rapids, MI<br>Shipping across USA<br><a href="mailto:beercitybilliards@gmail.com">beercitybilliards@gmail.com</a><br><a href="tel:+16166438058">616-643-8058</a></p><div class="social"><a href="{{ settings.social_facebook_link | default: '#' }}" aria-label="Facebook">f</a><a href="{{ settings.social_instagram_link | default: '#' }}" aria-label="Instagram">ig</a><a href="{{ settings.social_youtube_link | default: '#' }}" aria-label="YouTube">yt</a></div></div>
+    <div><h4>Shop</h4><ul><li><a href="{{ all_url }}">All Products</a></li><li><a href="{{ collections['chalk-holders'].url | default: all_url }}">Chalk Holders</a></li><li><a href="{{ collections['coin-holders'].url | default: all_url }}">Coin Holders</a></li><li><a href="{{ collections['cue-rests'].url | default: all_url }}">Cue Rests &amp; Bridges</a></li><li><a href="{{ collections['cue-gloves'].url | default: all_url }}">Gloves</a></li><li><a href="{{ collections['gift-sets'].url | default: all_url }}">Gift Boxes</a></li><li><a href="{{ all_url }}?filter.p.vendor=Taom">TAOM</a></li><li><a href="{{ all_url }}?filter.p.vendor=CRU5H">CRU5H</a></li></ul></div>
+    <div><h4>Services</h4><ul><li><a href="{{ service_url }}">Table Re-Felting</a></li><li><a href="{{ service_url }}">Leveling &amp; Slate</a></li><li><a href="{{ service_url }}">Cushion Replacement</a></li><li><a href="{{ service_url }}">Assembly &amp; Moving</a></li><li><a href="{{ service_url }}">Restoration</a></li><li><a href="{{ about_url }}">About Us</a></li><li><a href="{{ contact_url }}">Contact</a></li></ul></div>
+    <div><h4>Get 10% Off First Order</h4><p style="font-size:13px;color:#a3a3a3">Join our list for new drops, league tips, and Michigan repair slots.</p>{% form 'customer', class: 'newsletter' %}<input type="hidden" name="contact[tags]" value="newsletter"><input type="email" name="contact[email]" required placeholder="Your email" aria-label="Email address"><button type="submit">Join</button>{% endform %}<div class="pay-row" style="margin-top:18px"><span>VISA</span><span>MASTERCARD</span><span>AMEX</span><span>PAYPAL</span><span>SHOP PAY</span></div></div>
+  </div>
+  <div class="copy"><span>© {{ 'now' | date: '%Y' }} Beer City Billiards. All rights reserved. • Premium Billiards Accessories in USA</span><span>Built for Shopify Dawn • Fast • Lightweight • SEO Optimized</span></div>
+</div></footer>
+
+<nav class="mobilenav" aria-label="Quick navigation">
+  <a href="{{ all_url }}"><svg viewBox="0 0 24 24"><path d="M4 8h16M4 13h16M4 18h10"/></svg>Shop</a>
+  <button type="button" data-search-open><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>Search</button>
+  <a href="tel:+16166438058"><svg viewBox="0 0 24 24"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a1 1 0 0 1-1 1A16 16 0 0 1 4 5a1 1 0 0 1 1-1Z"/></svg>Call</a>
+  <button type="button" data-cart-open style="position:relative"><svg viewBox="0 0 24 24"><path d="M6 7h12l1.5 12H4.5L6 7Z"/><path d="M9 7V5.5a3 3 0 0 1 6 0V7"/></svg>Cart <span class="cart-count" data-cart-count{% if cart.item_count == 0 %} hidden{% endif %}>{{ cart.item_count }}</span></button>
+</nav>
+
+{% schema %}
+{"name":"BCB Exact Footer","enabled_on":{"groups":["footer"]},"settings":[]}
+{% endschema %}
