@@ -1,7 +1,7 @@
 (function(){
 'use strict';
 var $=function(s,c){return(c||document).querySelector(s)},$$=function(s,c){return Array.prototype.slice.call((c||document).querySelectorAll(s))};
-var freeShip=5000;
+var freeShip=7500;
 function money(c){try{return new Intl.NumberFormat(document.documentElement.lang||'en-US',{style:'currency',currency:(window.Shopify&&Shopify.currency&&Shopify.currency.active)||'USD'}).format(c/100)}catch(e){return'$'+(c/100).toFixed(2)}}
 function lock(on){document.documentElement.style.overflow=on?'hidden':''}
 function openSearch(){var s=$('#search-overlay');if(!s)return;s.classList.add('is-open');lock(true);var i=$('#search-input');if(i)setTimeout(function(){i.focus()},10)}
