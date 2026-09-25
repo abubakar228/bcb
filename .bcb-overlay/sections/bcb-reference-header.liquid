@@ -1,0 +1,87 @@
+{% liquid
+  assign logo_width = section.settings.logo_width | default: 156
+  assign shop_all_url = section.settings.shop_all_link | default: routes.all_products_collection_url
+  assign service_url = section.settings.service_link | default: '/pages/table-service'
+  assign about_url = section.settings.about_link | default: '/pages/about-us'
+  assign contact_url = section.settings.contact_link | default: '/pages/contact'
+%}
+
+<div class="bcb-announcement" role="region" aria-label="Announcement">
+  <div class="bcb-header-container">
+    <p>✦ {{ section.settings.announcement | escape }}</p>
+  </div>
+</div>
+
+<header class="bcb-site-header" data-bcb-header>
+  <div class="bcb-header-container bcb-site-header__inner">
+    <a class="bcb-site-header__logo" href="{{ routes.root_url }}" aria-label="{{ shop.name | escape }}">
+      {% if section.settings.logo != blank %}
+        {{ section.settings.logo | image_url: width: 420 | image_tag: widths: '160,240,320,420', width: logo_width, loading: 'eager', alt: shop.name }}
+      {% elsif settings.logo != blank %}
+        {{ settings.logo | image_url: width: 420 | image_tag: widths: '160,240,320,420', width: logo_width, loading: 'eager', alt: shop.name }}
+      {% else %}
+        <img src="{{ 'bcb-logo.png' | asset_url }}" width="{{ logo_width }}" height="121" alt="Beer City Billiards" loading="eager">
+      {% endif %}
+    </a>
+
+    <nav class="bcb-desktop-nav" aria-label="Primary navigation">
+      <a href="{{ shop_all_url }}">{{ section.settings.shop_all_label }}</a>
+      <details class="bcb-nav-dropdown">
+        <summary>{{ section.settings.brands_label }} <span aria-hidden="true">⌄</span></summary>
+        <div class="bcb-nav-dropdown__panel">
+          <a href="{% if collections['beer-city-billiards'] != blank %}{{ collections['beer-city-billiards'].url }}{% else %}{{ routes.all_products_collection_url }}{% endif %}">Beer City Billiards</a>
+          <a href="{% if collections['cru5h'] != blank %}{{ collections['cru5h'].url }}{% else %}{{ routes.all_products_collection_url }}{% endif %}">CRU5H</a>
+          <a href="{% if collections['taom'] != blank %}{{ collections['taom'].url }}{% else %}{{ routes.all_products_collection_url }}{% endif %}">TAOM</a>
+          <a href="{% if collections['coinfinity'] != blank %}{{ collections['coinfinity'].url }}{% else %}{{ routes.all_products_collection_url }}{% endif %}">Coinfinity</a>
+        </div>
+      </details>
+      <a href="{{ service_url }}">{{ section.settings.service_label }}</a>
+      <a href="{{ about_url }}">{{ section.settings.about_label }}</a>
+      <a href="{{ contact_url }}">{{ section.settings.contact_label }}</a>
+    </nav>
+
+    <div class="bcb-site-header__actions">
+      <a class="bcb-header-icon bcb-header-cart" href="{{ routes.cart_url }}" aria-label="Cart, {{ cart.item_count }} items">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 4h2l2.1 10.1a2 2 0 0 0 2 1.6h7.9a2 2 0 0 0 2-1.6L20.5 8H6"></path><circle cx="10" cy="19" r="1"></circle><circle cx="18" cy="19" r="1"></circle></svg>
+        <span class="bcb-cart-count">{{ cart.item_count }}</span>
+      </a>
+      <details class="bcb-mobile-menu">
+        <summary class="bcb-header-icon" aria-label="Open menu">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"></path></svg>
+        </summary>
+        <div class="bcb-mobile-menu__panel">
+          <a href="{{ shop_all_url }}">{{ section.settings.shop_all_label }}</a>
+          <span class="bcb-mobile-menu__label">{{ section.settings.brands_label }}</span>
+          <a class="bcb-mobile-sub" href="{% if collections['beer-city-billiards'] != blank %}{{ collections['beer-city-billiards'].url }}{% else %}{{ routes.all_products_collection_url }}{% endif %}">Beer City Billiards</a>
+          <a class="bcb-mobile-sub" href="{% if collections['cru5h'] != blank %}{{ collections['cru5h'].url }}{% else %}{{ routes.all_products_collection_url }}{% endif %}">CRU5H</a>
+          <a class="bcb-mobile-sub" href="{% if collections['taom'] != blank %}{{ collections['taom'].url }}{% else %}{{ routes.all_products_collection_url }}{% endif %}">TAOM</a>
+          <a class="bcb-mobile-sub" href="{% if collections['coinfinity'] != blank %}{{ collections['coinfinity'].url }}{% else %}{{ routes.all_products_collection_url }}{% endif %}">Coinfinity</a>
+          <a href="{{ service_url }}">{{ section.settings.service_label }}</a>
+          <a href="{{ about_url }}">{{ section.settings.about_label }}</a>
+          <a href="{{ contact_url }}">{{ section.settings.contact_label }}</a>
+        </div>
+      </details>
+    </div>
+  </div>
+</header>
+
+{% schema %}
+{
+  "name": "BCB Reference Header",
+  "settings": [
+    {"type":"text","id":"announcement","label":"Announcement","default":"FREE SHIPPING OVER $50 IN USA | MICHIGAN'S TRUSTED POOL TABLE REPAIR | SAME-DAY DISPATCH"},
+    {"type":"image_picker","id":"logo","label":"Logo"},
+    {"type":"range","id":"logo_width","min":110,"max":220,"step":2,"unit":"px","label":"Logo width","default":156},
+    {"type":"text","id":"shop_all_label","label":"Shop all label","default":"Shop All"},
+    {"type":"url","id":"shop_all_link","label":"Shop all link"},
+    {"type":"text","id":"brands_label","label":"Brands label","default":"Brands"},
+    {"type":"text","id":"service_label","label":"Service label","default":"Table Service"},
+    {"type":"url","id":"service_link","label":"Service link"},
+    {"type":"text","id":"about_label","label":"About label","default":"About"},
+    {"type":"url","id":"about_link","label":"About link"},
+    {"type":"text","id":"contact_label","label":"Contact label","default":"Contact"},
+    {"type":"url","id":"contact_link","label":"Contact link"}
+  ],
+  "enabled_on": {"groups":["header"]}
+}
+{% endschema %}
