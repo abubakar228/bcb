@@ -1,0 +1,40 @@
+<div class="bcb-zip">
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <img src="{{ 'bcbzip-logo.png' | asset_url }}" alt="" style="height:64px;width:auto;margin-bottom:14px;background:white;border-radius:10px;padding:6px;display:block">
+        <p>Premium billiards accessories and professional pool table repair services across Michigan. Affordable, reliable, premium pool products for all levels.</p>
+        <p style="margin-top:14px;color:#9a9a9a;font-size:13px">Based in Grand Rapids, MI<br>Shipping across USA</p>
+      </div>
+      <div>
+        <h4>Shop</h4>
+        <p><a href="{{ routes.all_products_collection_url }}">All Products</a><br><a href="{{ collections['chalk-holders'].url | default: routes.all_products_collection_url }}">Chalk Holders</a><br><a href="{{ collections['coin-holders'].url | default: routes.all_products_collection_url }}">Coin Holders</a><br><a href="{{ collections['cue-rests-bridges'].url | default: routes.all_products_collection_url }}">Cue Rests &amp; Bridges</a><br><a href="{{ collections['gloves'].url | default: routes.all_products_collection_url }}">Gloves</a><br><a href="{{ collections['gift-boxes'].url | default: routes.all_products_collection_url }}">Gift Boxes</a><br><a href="{{ collections['taom'].url | default: routes.all_products_collection_url }}">TAOM</a><br><a href="{{ collections['cru5h'].url | default: routes.all_products_collection_url }}">CRU5H</a></p>
+      </div>
+      <div>
+        <h4>Services</h4>
+        <p><a href="{{ pages['table-service'].url | default: '/pages/table-service' }}">Table Re-Felting</a><br><a href="{{ pages['table-service'].url | default: '/pages/table-service' }}">Leveling &amp; Slate</a><br><a href="{{ pages['table-service'].url | default: '/pages/table-service' }}">Cushion Replacement</a><br><a href="{{ pages['table-service'].url | default: '/pages/table-service' }}">Assembly &amp; Moving</a><br><a href="{{ pages['table-service'].url | default: '/pages/table-service' }}">Restoration</a><br><a href="{{ pages['about-us'].url | default: '/pages/about-us' }}">About Us</a><br><a href="{{ pages['contact'].url | default: '/pages/contact' }}">Contact</a></p>
+      </div>
+      <div>
+        <h4>Get 10% Off First Order</h4>
+        <p style="font-size:13px;color:#a3a3a3">Join our list for new drops, league tips, and Michigan repair slots.</p>
+        {% form 'customer', class: 'newsletter' %}
+          <input type="hidden" name="contact[tags]" value="newsletter">
+          <input type="email" name="contact[email]" placeholder="Your email" required>
+          <button type="submit">Join</button>
+        {% endform %}
+        <div style="margin-top:18px;display:flex;gap:10px">
+          <a href="{{ settings.social_facebook_link | default: '#' }}" aria-label="Facebook" style="width:36px;height:36px;border-radius:999px;background:#1a1a1a;display:grid;place-items:center"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></a>
+          <a href="{{ settings.social_instagram_link | default: '#' }}" aria-label="Instagram" style="width:36px;height:36px;border-radius:999px;background:#1a1a1a;display:grid;place-items:center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></a>
+          <a href="{{ settings.social_youtube_link | default: '#' }}" aria-label="YouTube" style="width:36px;height:36px;border-radius:999px;background:#1a1a1a;display:grid;place-items:center"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.95C18.88 4 12 4 12 4s-6.88 0-8.59.47A2.78 2.78 0 0 0 1.46 6.42 28.65 28.65 0 0 0 1 12a28.65 28.65 0 0 0 .46 5.58 2.78 2.78 0 0 0 1.95 1.95C5.12 20 12 20s6.88 0 8.59-.47a2.78 2.78 0 0 0 1.95-1.95A28.65 28.65 0 0 0 23 12a28.65 28.65 0 0 0-.46-5.58z"/><path d="M9.75 15.02V8.98L15.5 12z" fill="black"/></svg></a>
+        </div>
+      </div>
+    </div>
+    <div class="copy">
+      <span>© {{ 'now' | date: '%Y' }} Beer City Billiards. All rights reserved. • Premium Billiards Accessories in USA</span>
+      <span>Built for Shopify Dawn • Fast • Lightweight • SEO Optimized</span>
+    </div>
+  </div>
+</footer>
+</div>
+{% schema %}{"name":"BCB ZIP Exact Footer","enabled_on":{"groups":["footer"]},"settings":[]}{% endschema %}
