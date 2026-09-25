@@ -1,0 +1,75 @@
+<footer class="bcb-reference-footer">
+  <div class="bcb-container bcb-footer-grid">
+    <div class="bcb-footer-brand">
+      <a href="{{ routes.root_url }}" aria-label="{{ shop.name | escape }}">
+        {% if section.settings.logo != blank %}
+          {{ section.settings.logo | image_url: width: 430 | image_tag: loading: 'lazy', widths: '200,300,430', alt: shop.name }}
+        {% elsif settings.logo != blank %}
+          {{ settings.logo | image_url: width: 430 | image_tag: loading: 'lazy', widths: '200,300,430', alt: shop.name }}
+        {% else %}
+          <img src="{{ 'bcb-logo.png' | asset_url }}" loading="lazy" alt="Beer City Billiards">
+        {% endif %}
+      </a>
+      <p>{{ section.settings.description }}</p>
+      <div class="bcb-footer-meta"><span>Based in Grand Rapids, MI</span><span>Shipping across USA</span></div>
+    </div>
+
+    <div class="bcb-footer-column">
+      <h3>Shop</h3>
+      <a href="{{ routes.all_products_collection_url }}">All Products</a>
+      <a href="{% if collections['chalk-holders'] != blank %}{{ collections['chalk-holders'].url }}{% else %}{{ routes.all_products_collection_url }}{% endif %}">Chalk Holders</a>
+      <a href="{% if collections['coin-holders'] != blank %}{{ collections['coin-holders'].url }}{% else %}{{ routes.all_products_collection_url }}{% endif %}">Coin Holders</a>
+      <a href="{% if collections['cue-rests-bridges'] != blank %}{{ collections['cue-rests-bridges'].url }}{% else %}{{ routes.all_products_collection_url }}{% endif %}">Cue Rests &amp; Bridges</a>
+      <a href="{% if collections['gloves'] != blank %}{{ collections['gloves'].url }}{% else %}{{ routes.all_products_collection_url }}{% endif %}">Gloves</a>
+      <a href="{% if collections['gift-boxes'] != blank %}{{ collections['gift-boxes'].url }}{% else %}{{ routes.all_products_collection_url }}{% endif %}">Gift Boxes</a>
+      <a href="{% if collections['taom'] != blank %}{{ collections['taom'].url }}{% else %}{{ routes.all_products_collection_url }}{% endif %}">TAOM</a>
+      <a href="{% if collections['cru5h'] != blank %}{{ collections['cru5h'].url }}{% else %}{{ routes.all_products_collection_url }}{% endif %}">CRU5H</a>
+    </div>
+
+    <div class="bcb-footer-column">
+      <h3>Services</h3>
+      <a href="{{ section.settings.service_link | default: '/pages/table-service' }}">Table Re-Felting</a>
+      <a href="{{ section.settings.service_link | default: '/pages/table-service' }}">Leveling &amp; Slate</a>
+      <a href="{{ section.settings.service_link | default: '/pages/table-service' }}">Cushion Replacement</a>
+      <a href="{{ section.settings.service_link | default: '/pages/table-service' }}">Assembly &amp; Moving</a>
+      <a href="{{ section.settings.service_link | default: '/pages/table-service' }}">Restoration</a>
+      <a href="{{ section.settings.about_link | default: '/pages/about-us' }}">About Us</a>
+      <a href="{{ section.settings.contact_link | default: '/pages/contact' }}">Contact</a>
+    </div>
+
+    <div class="bcb-footer-newsletter">
+      <h3>Get 10% Off First Order</h3>
+      <p>Join our list for new drops, league tips, and Michigan repair slots.</p>
+      {% form 'customer', class: 'bcb-newsletter-form' %}
+        <input type="hidden" name="contact[tags]" value="newsletter">
+        <label class="visually-hidden" for="BCBFooterEmail-{{ section.id }}">Your email</label>
+        <div class="bcb-newsletter-input-row">
+          <input id="BCBFooterEmail-{{ section.id }}" type="email" name="contact[email]" value="{{ form.email }}" autocorrect="off" autocapitalize="off" autocomplete="email" placeholder="Your email" required>
+          <button type="submit">Join</button>
+        </div>
+        {% if form.posted_successfully? %}<p class="bcb-newsletter-status">Thanks for subscribing.</p>{% endif %}
+        {% if form.errors %}<p class="bcb-newsletter-status">{{ form.errors.translated_fields.email | capitalize }} {{ form.errors.messages.email }}</p>{% endif %}
+      {% endform %}
+    </div>
+  </div>
+  <div class="bcb-footer-bottom">
+    <div class="bcb-container bcb-footer-bottom__inner">
+      <span>© {{ 'now' | date: '%Y' }} Beer City Billiards. All rights reserved. • Premium Billiards Accessories in USA</span>
+      <span>Built for Shopify Dawn • Fast • Lightweight • SEO Optimized</span>
+    </div>
+  </div>
+</footer>
+
+{% schema %}
+{
+  "name":"BCB Reference Footer",
+  "settings":[
+    {"type":"image_picker","id":"logo","label":"Logo"},
+    {"type":"textarea","id":"description","label":"Description","default":"Premium billiards accessories and professional pool table repair services across Michigan. Affordable, reliable, premium pool products for all levels."},
+    {"type":"url","id":"service_link","label":"Table service link"},
+    {"type":"url","id":"about_link","label":"About link"},
+    {"type":"url","id":"contact_link","label":"Contact link"}
+  ],
+  "enabled_on": {"groups":["footer"]}
+}
+{% endschema %}
